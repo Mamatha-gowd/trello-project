@@ -1,0 +1,16 @@
+.App {
+  background-color: skyblue;
+  height: 100vh;
+}
+.todo-list {
+  height: 80vh;
+  width: 20%;
+}
+.delete-card {
+  width: 70px;
+  margin-left: 70%;
+  margin-bottom: 10%;
+}
+.add-card {
+  width: 100%;
+}
