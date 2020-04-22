@@ -9,8 +9,9 @@ const key = "23fe0646c0d1253eb430f7e02db925a0";
 class List extends Component {
   state = {
     addCard: false,
-    // clicked: false,
+    show: false,
     cards: [],
+    modal: {},
   };
   showAddCard = () => {
     this.setState({
@@ -25,7 +26,7 @@ class List extends Component {
     });
   };
 
-  deleteCard = (data) => {
+  deleteCard = (e, data) => {
     let url = `https://api.trello.com/1/cards/${data}?key=${key}&token=${token}`;
     fetch(url, {
       method: "DELETE",
@@ -59,13 +60,22 @@ class List extends Component {
       });
   };
 
+  activeModal = (e) => {
+    this.setState({
+      show: true,
+      modal: e,
+    });
+  };
+
+  removeModal = (e) => {
+    this.setState({ show: false });
+  };
+
   componentDidMount() {
     let url = `https://api.trello.com/1/lists/5e8838bc95f9447a48ade567/cards?key=${key}&token=${token}`;
     fetch(url)
       .then((res) => res.json())
       .then((result) => {
-        // console.log(result);
-        //this.setState({ cards: result });
         let data = result;
         for (let i = 0; i < data.length; i++) {
           let cardname = data[i].name;
@@ -94,7 +104,8 @@ class List extends Component {
             console.log(card.id);
             return (
               <button
-                className="btn btn-light btn-sm mb-2 add-card"
+                className="btn btn-primary btn-sm mb-2 add-card"
+                onClick={(e) => this.activeModal(card)}
                 id={card.id}
                 key={card.id}
               >
@@ -110,6 +121,14 @@ class List extends Component {
             );
           })}
         </div>
+        {this.state.show ? (
+          <Modal
+            removeModal={this.removeModal}
+            show={this.state.show}
+            data={this.state.cards}
+            modal={this.state.modal}
+          />
+        ) : null}
         <div className="card-footer bg-light">
           {this.state.addCard ? (
             <Input onAdd={this.handleInput} onDelete={this.cancelAddCard} />

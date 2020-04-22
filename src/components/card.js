@@ -6,7 +6,9 @@ const Card = (props) => {
   return (
     <button
       className="btn btn-light btn-sm  delete-card "
-      onClick={() => props.onDelete(data.id)}
+      onClick={(e) => {
+        props.onDelete(e, data.id);
+      }}
     >
       X
     </button>
