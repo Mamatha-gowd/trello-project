@@ -1,11 +1,14 @@
 import React, { Component } from "react";
+import { Button } from "react-bootstrap";
 import Card from "./card";
 import Input from "./addcard";
 import Modal from "./Modal";
+import Listfile from "./Listfile";
 const token =
   "52615ebb3fb8336a474fd1ab9ec8ae053f5321433e1cbfefefb33a1779816ba9";
 const url = "https://api.trello.com";
 const key = "23fe0646c0d1253eb430f7e02db925a0";
+const listid = "5e8838bc95f9447a48ade567";
 class List extends Component {
   state = {
     addCard: false,
@@ -27,19 +30,21 @@ class List extends Component {
   };
 
   deleteCard = (e, data) => {
+    e.preventDefault();
     let url = `https://api.trello.com/1/cards/${data}?key=${key}&token=${token}`;
     fetch(url, {
       method: "DELETE",
     });
     this.setState({
       cards: this.state.cards.filter((obj) => obj.id !== data),
+      show: false,
     });
   };
 
   handleInput = (e, name) => {
     e.preventDefault();
     this.setState({ addCard: true });
-    let url = `https://api.trello.com/1/cards?idList=5e8838bc95f9447a48ade567&name=${name}&key=${key}&token=${token}`;
+    let url = `https://api.trello.com/1/cards?idList=${this.props.list.id}&name=${name}&key=${key}&token=${token}`;
     fetch(url, {
       method: "POST",
     })
@@ -60,11 +65,13 @@ class List extends Component {
       });
   };
 
-  activeModal = (e) => {
-    this.setState({
-      show: true,
-      modal: e,
-    });
+  activeModal = (e, card) => {
+    if (!e.target.className.includes("delete-card")) {
+      this.setState({
+        show: true,
+        modal: card,
+      });
+    }
   };
 
   removeModal = (e) => {
@@ -72,7 +79,7 @@ class List extends Component {
   };
 
   componentDidMount() {
-    let url = `https://api.trello.com/1/lists/5e8838bc95f9447a48ade567/cards?key=${key}&token=${token}`;
+    let url = `https://api.trello.com/1/lists/${this.props.list.id}/cards?key=${key}&token=${token}`;
     fetch(url)
       .then((res) => res.json())
       .then((result) => {
@@ -97,30 +104,48 @@ class List extends Component {
     const { addCard } = this.state.addCard;
     console.log(cards);
     return (
-      <div className="cards m-2 todo-list" onClick={this.handleClick}>
-        <div className="card-header bg-light rounded-2">Doing</div>
-        <div className="card-body border-0 bg-light" id="body">
-          {this.state.cards.map((card) => {
-            console.log(card.id);
-            return (
-              <button
-                className="btn btn-primary btn-sm mb-2 add-card"
-                onClick={(e) => this.activeModal(card)}
-                id={card.id}
-                key={card.id}
-              >
+      <div
+        className="rounded p-2 mr-2 ml-2 mt-3 d-inline-block todo-list"
+        style={{
+          backgroundColor: "lightgrey",
+          fontSize: "1.5em",
+          width: "12em",
+          boxSizing: "border-box",
+        }}
+        onClick={this.handleClick}
+      >
+        {this.props.list.name}
+        {/* <button
+            className="btn text-black float-right"
+            onClick={(e) => this.props.deleteList(e, this.props.list.id)}
+          >
+            delete
+          </button> */}
+
+        {/* <div className="card-body border-0 bg-light" id="body"> */}
+        {this.state.cards.map((card) => {
+          console.log(card.id);
+          return (
+            <button
+              className="btn btn-light mb-2 p-2 w-100 mt-5 h-20 rounded d-flex justify-content-between align-items-center flex-wrap add-card"
+              onClick={(e) => this.activeModal(e, card)}
+              id={card.id}
+              key={card.id}
+            >
+              <div className="text-left" style={{ width: "80%" }}>
                 {card.name}
-                <Card
-                  onDelete={this.deleteCard}
-                  data={card}
-                  key={card.id}
-                  id={card.id}
-                  name={card.name}
-                />
-              </button>
-            );
-          })}
-        </div>
+              </div>
+              <Card
+                onDelete={this.deleteCard}
+                data={card}
+                key={card.id}
+                id={card.id}
+                name={card.name}
+              />
+            </button>
+          );
+        })}
+        {/* </div> */}
         {this.state.show ? (
           <Modal
             removeModal={this.removeModal}
@@ -134,7 +159,7 @@ class List extends Component {
             <Input onAdd={this.handleInput} onDelete={this.cancelAddCard} />
           ) : (
             <div
-              className="btn btn secondary  add-card"
+              className="btn px-2 py-0 d-flex add-card"
               onClick={this.showAddCard}
             >
               Add another card

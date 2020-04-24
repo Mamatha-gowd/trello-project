@@ -2,35 +2,40 @@ import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class Addcheckbox extends Component {
-  //   state = {
-  //     input: "",
-  //   };
-
-  inputText = (e) => this.setState({ input: e.target.value });
   render() {
-    const { input } = this.props.input;
-    const { onAdd, onDelete } = this.props;
+    const {
+      checklistid,
+      checkitemid,
+      updateState,
+      name,
+      deleteCheckitem,
+      state,
+    } = this.props;
     return (
-      <form>
-        <input
-          type="text"
-          className="form-control "
-          placeholder="enter checkitem name"
-          onChange={this.inputText}
-          value={this.props.input}
-        />
-
+      <div className="d-flex text-start align-items-center">
+        {state === "incomplete" ? (
+          <input
+            type="checkbox"
+            className="update"
+            onClick={() => updateState(checklistid, checkitemid, "complete")}
+          />
+        ) : (
+          <input
+            type="checkbox"
+            className="update"
+            onClick={() => updateState(checklistid, checkitemid, "incomplete")}
+          />
+        )}
+        <div className="checkitems">
+          <h5>{name}</h5>
+        </div>
         <button
-          className="btn btn-success mr-4 mt-2"
-          onClick={(e) => onAdd(e, input)}
+          className="btn btn-light delete-checkitem"
+          onClick={(e) => deleteCheckitem(e, checklistid, checkitemid)}
         >
-          update
+          x
         </button>
-
-        <button className="btn btn-light" onClick={(e) => onDelete(e)}>
-          X
-        </button>
-      </form>
+      </div>
     );
   }
 }

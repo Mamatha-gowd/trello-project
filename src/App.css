@@ -1,10 +1,6 @@
-.App {
-  background-color: skyblue;
+.board {
   height: 100vh;
-}
-.todo-list {
-  height: 80vh;
-  width: 20%;
+  background-image: url("./image.jpg");
 }
 .delete-card {
   width: 70px;
@@ -12,5 +8,19 @@
   margin-bottom: 10%;
 }
 .add-card {
-  width: 100%;
+  height: 20%;
+}
+.delete-checkitem {
+  margin-left: 80%;
+  font-size: 15px;
+}
+.listing {
+  margin-left: 100%;
+}
+.list-container {
+  display: flex;
+  overflow-x: auto;
+}
+.listbutton {
+  width: 200px;
 }

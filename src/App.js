@@ -1,16 +1,17 @@
 import React, { Component } from "react";
-import List from "./components/List";
+import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
-
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="text-center h4 m-2 pt-1">Trello Clone</div>
-        <List />
-      </div>
-    );
-  }
+import Boardfile from "./components/Boardfile";
+import Listfile from "./components/Listfile";
+function App() {
+  return (
+    <div>
+      <BrowserRouter>
+        <Route exact path="/" component={Boardfile} />
+        <Route path="/boards/:id" component={Listfile} />
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;

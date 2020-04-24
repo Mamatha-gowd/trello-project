@@ -15,7 +15,7 @@ class Input extends Component {
         <input
           type="text"
           className="form-control "
-          placeholder="enter card name"
+          placeholder="enter name"
           onChange={this.inputText}
           value={input}
         />

@@ -9,7 +9,7 @@ class Addcheckitem extends Component {
   inputText = (e) => this.setState({ input: e.target.value });
   render() {
     const { input } = this.state;
-    const { onAdd, onDelete, checklistid } = this.props;
+    const { onAdd, onRemove, checklistid, checkitemid } = this.props;
     return (
       <form>
         <input
@@ -22,12 +22,12 @@ class Addcheckitem extends Component {
 
         <button
           className="btn btn-success mr-4 mt-2"
-          onClick={(e) => onAdd(e, input, checklistid)}
+          onClick={(e) => onAdd(e, input, checklistid, checkitemid)}
         >
-          Add
+          update
         </button>
 
-        <button className="btn btn-light" onClick={(e) => onDelete(e)}>
+        <button className="btn btn-light" onClick={(e) => onRemove(e)}>
           X
         </button>
       </form>
