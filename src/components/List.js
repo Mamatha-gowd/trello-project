@@ -1,21 +1,19 @@
 import React, { Component } from "react";
 import { Button } from "react-bootstrap";
+import { connect } from "react-redux";
 import Card from "./card";
 import Input from "./addcard";
 import Modal from "./Modal";
-import Listfile from "./Listfile";
-const token =
-  "52615ebb3fb8336a474fd1ab9ec8ae053f5321433e1cbfefefb33a1779816ba9";
-const url = "https://api.trello.com";
-const key = "23fe0646c0d1253eb430f7e02db925a0";
-const listid = "5e8838bc95f9447a48ade567";
+import { getCards, addCard, deleteCard } from "../Actions/Cardaction";
 class List extends Component {
-  state = {
-    addCard: false,
-    show: false,
-    cards: [],
-    modal: {},
-  };
+  constructor(props) {
+    super();
+    this.state = {
+      addCard: false,
+      show: false,
+      modal: {},
+    };
+  }
   showAddCard = () => {
     this.setState({
       addCard: true,
@@ -31,38 +29,12 @@ class List extends Component {
 
   deleteCard = (e, data) => {
     e.preventDefault();
-    let url = `https://api.trello.com/1/cards/${data}?key=${key}&token=${token}`;
-    fetch(url, {
-      method: "DELETE",
-    });
-    this.setState({
-      cards: this.state.cards.filter((obj) => obj.id !== data),
-      show: false,
-    });
+    this.props.deleteCard(this.props.list.id, data);
   };
 
   handleInput = (e, name) => {
     e.preventDefault();
-    this.setState({ addCard: true });
-    let url = `https://api.trello.com/1/cards?idList=${this.props.list.id}&name=${name}&key=${key}&token=${token}`;
-    fetch(url, {
-      method: "POST",
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        let cardname = result.name;
-        let cardid = result.id;
-        this.setState({
-          cards: [
-            ...this.state.cards,
-            {
-              name: cardname,
-              id: cardid,
-            },
-          ],
-        });
-      });
+    this.props.addCard(name, this.props.list.id);
   };
 
   activeModal = (e, card) => {
@@ -79,30 +51,11 @@ class List extends Component {
   };
 
   componentDidMount() {
-    let url = `https://api.trello.com/1/lists/${this.props.list.id}/cards?key=${key}&token=${token}`;
-    fetch(url)
-      .then((res) => res.json())
-      .then((result) => {
-        let data = result;
-        for (let i = 0; i < data.length; i++) {
-          let cardname = data[i].name;
-          let cardid = data[i].id;
-          this.setState(() => ({
-            cards: [
-              ...this.state.cards,
-              {
-                name: cardname,
-                id: cardid,
-              },
-            ],
-          }));
-        }
-      });
+    this.props.getCards(this.props.list.id);
   }
   render() {
-    const cards = this.state.cards;
+    console.log(this.props);
     const { addCard } = this.state.addCard;
-    console.log(cards);
     return (
       <div
         className="rounded p-2 mr-2 ml-2 mt-3 d-inline-block todo-list"
@@ -115,42 +68,35 @@ class List extends Component {
         onClick={this.handleClick}
       >
         {this.props.list.name}
-        {/* <button
-            className="btn text-black float-right"
-            onClick={(e) => this.props.deleteList(e, this.props.list.id)}
-          >
-            delete
-          </button> */}
-
-        {/* <div className="card-body border-0 bg-light" id="body"> */}
-        {this.state.cards.map((card) => {
-          console.log(card.id);
-          return (
-            <button
-              className="btn btn-light mb-2 p-2 w-100 mt-5 h-20 rounded d-flex justify-content-between align-items-center flex-wrap add-card"
-              onClick={(e) => this.activeModal(e, card)}
-              id={card.id}
-              key={card.id}
-            >
-              <div className="text-left" style={{ width: "80%" }}>
-                {card.name}
-              </div>
-              <Card
-                onDelete={this.deleteCard}
-                data={card}
-                key={card.id}
-                id={card.id}
-                name={card.name}
-              />
-            </button>
-          );
-        })}
+        {this.props.cards[this.props.list.id] !== undefined
+          ? this.props.cards[this.props.list.id].map((cards) => {
+              return (
+                <button
+                  className="btn btn-light mb-2 p-2 w-100  h-20 rounded d-flex justify-content-between align-items-center flex-wrap add-card"
+                  onClick={(e) => this.activeModal(e, cards)}
+                  id={cards.id}
+                  key={cards.id}
+                >
+                  <div className="text-left" style={{ width: "80%" }}>
+                    {cards.name}
+                  </div>
+                  <Card
+                    onDelete={this.deleteCard}
+                    data={cards}
+                    key={cards.id}
+                    id={cards.id}
+                    //name={cardDetails.name}
+                  />
+                </button>
+              );
+            })
+          : null}
         {/* </div> */}
         {this.state.show ? (
           <Modal
             removeModal={this.removeModal}
             show={this.state.show}
-            data={this.state.cards}
+            data={this.state.cardDetails}
             modal={this.state.modal}
           />
         ) : null}
@@ -170,5 +116,7 @@ class List extends Component {
     );
   }
 }
-
-export default List;
+const mapStateToProps = (state) => ({ cards: state.Cardreducer.cards });
+export default connect(mapStateToProps, { getCards, addCard, deleteCard })(
+  List
+);

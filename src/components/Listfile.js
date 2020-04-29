@@ -1,16 +1,11 @@
 import React, { Component } from "react";
 import Input from "./addcard";
 import List from "./List";
-import Board from "./Board";
-const token =
-  "52615ebb3fb8336a474fd1ab9ec8ae053f5321433e1cbfefefb33a1779816ba9";
-const url = "https://api.trello.com";
-const key = "23fe0646c0d1253eb430f7e02db925a0";
-const boardid = "5e8760dd0480e75528f188ef";
+import { connect } from "react-redux";
+import { getLists, addList } from "../Actions/Listaction";
 
 class Listfile extends Component {
   state = {
-    lists: [],
     addlist: false,
   };
 
@@ -28,56 +23,13 @@ class Listfile extends Component {
   };
 
   componentDidMount() {
-    const id = this.props.match.params.id;
-    let url = `https://api.trello.com/1/boards/${id}/lists?key=${key}&token=${token}`;
-    fetch(url, {
-      method: "GET",
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        let data = result;
-        for (let i = 0; i < data.length; i++) {
-          let listname = data[i].name;
-          let listid = data[i].id;
-          this.setState(() => ({
-            lists: [
-              ...this.state.lists,
-              {
-                name: listname,
-                id: listid,
-              },
-            ],
-          }));
-        }
-      });
+    this.props.getLists(this.props.match.params.id);
   }
-  //   deleteList =(e,listid)=>{
-  //       e.preventDefault();
-  //       let url =
-  //   }
 
   handleInput = (e, name) => {
     e.preventDefault();
+    this.props.addList(name, this.props.match.params.id);
     this.setState({ addlist: true });
-    let url = `https://api.trello.com/1/lists?name=${name}&idBoard=${boardid}&key=${key}&token=${token}`;
-    fetch(url, {
-      method: "POST",
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        let listname = result.name;
-        let listid = result.id;
-        this.setState({
-          lists: [
-            ...this.state.lists,
-            {
-              name: listname,
-              id: listid,
-            },
-          ],
-        });
-      });
   };
   render() {
     return (
@@ -88,7 +40,7 @@ class Listfile extends Component {
           height: "100vh",
         }}
       >
-        {this.state.lists.map((list) => (
+        {this.props.lists.map((list) => (
           <List list={list} key={list.id} />
         ))}
         <div
@@ -124,4 +76,5 @@ class Listfile extends Component {
     );
   }
 }
-export default Listfile;
+const mapStateToProps = (state) => ({ lists: state.Listreducer.lists });
+export default connect(mapStateToProps, { getLists, addList })(Listfile);
