@@ -77,4 +77,6 @@ class Listfile extends Component {
   }
 }
 const mapStateToProps = (state) => ({ lists: state.Listreducer.lists });
+
 export default connect(mapStateToProps, { getLists, addList })(Listfile);
+console.log(mapStateToProps);

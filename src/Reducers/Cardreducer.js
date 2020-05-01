@@ -1,7 +1,7 @@
 import { GET_CARDS, ADD_CARD, DELETE_CARD } from "../Actions/actiontypes";
 
 const initialState = {
-  cards: [],
+  cards: {},
 };
 export default function (state = initialState, action) {
   switch (action.type) {

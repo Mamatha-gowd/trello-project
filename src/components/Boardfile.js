@@ -20,3 +20,4 @@ class Boardfile extends Component {
 }
 const mapStateToProps = (state) => ({ boards: state.Boardreducer.boards });
 export default connect(mapStateToProps, { getBoards })(Boardfile);
+console.log(Boardfile);

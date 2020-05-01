@@ -54,7 +54,7 @@ class List extends Component {
     this.props.getCards(this.props.list.id);
   }
   render() {
-    console.log(this.props);
+    console.log(this.props.cards);
     const { addCard } = this.state.addCard;
     return (
       <div
@@ -91,13 +91,12 @@ class List extends Component {
               );
             })
           : null}
-        {/* </div> */}
         {this.state.show ? (
           <Modal
             removeModal={this.removeModal}
             show={this.state.show}
-            data={this.state.cardDetails}
             modal={this.state.modal}
+            //cardid={this.props.cards.id}
           />
         ) : null}
         <div className="card-footer bg-light">
