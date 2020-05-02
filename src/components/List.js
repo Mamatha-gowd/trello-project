@@ -127,7 +127,7 @@ class List extends Component {
           console.log(card.id);
           return (
             <button
-              className="btn btn-light mb-2 p-2 w-100 mt-5 h-20 rounded d-flex justify-content-between align-items-center flex-wrap add-card"
+              className="btn btn-light mb-2 p-2 w-100  h-20 rounded d-flex justify-content-between align-items-center flex-wrap add-card"
               onClick={(e) => this.activeModal(e, card)}
               id={card.id}
               key={card.id}
