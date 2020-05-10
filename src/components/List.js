@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import Card from "./deleteCard";
+import Card from "./Card";
 import Input from "./Form";
 import Modal from "./Modal";
+import { getListCardsAPI, addCardAPI, deleteCardAPI } from "./API";
 class List extends Component {
   state = {
     addCard: false,
@@ -24,10 +25,7 @@ class List extends Component {
 
   handleDeleteCard = (e, cardId) => {
     e.preventDefault();
-    let url = `https://api.trello.com/1/cards/${cardId}?key=${this.props.userKey}&token=${this.props.token}`;
-    fetch(url, {
-      method: "DELETE",
-    }).then((res) => {
+    deleteCardAPI(cardId).then((res) => {
       let cards = this.state.cards.filter((card) => card.cardId !== cardId);
       this.setState({ cards });
     });
@@ -36,18 +34,10 @@ class List extends Component {
   handleAddCard = (e, name) => {
     e.preventDefault();
     this.setState({ addCard: true });
-    let url = `https://api.trello.com/1/cards?idList=${this.props.list.listId}&name=${name}&key=${this.props.userKey}&token=${this.props.token}`;
-    fetch(url, {
-      method: "POST",
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        let cards = [
-          ...this.state.cards,
-          { cardId: res.id, cardName: res.name },
-        ];
-        this.setState({ cards });
-      });
+    addCardAPI(name, this.props.list.listId).then((res) => {
+      let cards = [...this.state.cards, { cardId: res.id, cardName: res.name }];
+      this.setState({ cards });
+    });
   };
 
   openModal = (e, card) => {
@@ -64,15 +54,12 @@ class List extends Component {
   };
 
   componentDidMount() {
-    let url = `https://api.trello.com/1/lists/${this.props.list.listId}/cards?key=${this.props.userKey}&token=${this.props.token}`;
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        let cards = res.map((card) => {
-          return { cardId: card.id, cardName: card.name };
-        });
-        this.setState({ cards });
+    getListCardsAPI(this.props.list.listId).then((res) => {
+      let cards = res.map((card) => {
+        return { cardId: card.id, cardName: card.name };
       });
+      this.setState({ cards });
+    });
   }
   render() {
     return (
@@ -89,20 +76,12 @@ class List extends Component {
         {this.props.list.listName}
         {this.state.cards.map((card) => {
           return (
-            <button
-              className="btn btn-light mb-2 p-2 w-100  h-20 rounded d-flex justify-content-between align-items-center flex-wrap add-card"
-              onClick={(e) => this.openModal(e, card)}
-              id={card.cardId}
-            >
-              <div className="text-left" style={{ width: "80%" }}>
-                {card.cardName}
-              </div>
-              <Card
-                onDelete={this.handleDeleteCard}
-                data={card}
-                key={card.cardId}
-              />
-            </button>
+            <Card
+              onDelete={this.handleDeleteCard}
+              data={card}
+              key={card.cardId}
+              openModal={this.openModal}
+            />
           );
         })}
         {this.state.show ? (
@@ -111,8 +90,6 @@ class List extends Component {
             show={this.state.show}
             data={this.state.cards}
             modal={this.state.modal}
-            userKey={this.props.userKey}
-            token={this.props.token}
           />
         ) : null}
         <div className="card-footer bg-light">

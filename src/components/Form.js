@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-class Input extends Component {
+class Form extends Component {
   state = {
     input: "",
   };
@@ -34,4 +34,4 @@ class Input extends Component {
     );
   }
 }
-export default Input;
+export default Form;

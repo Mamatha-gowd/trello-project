@@ -3,29 +3,24 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Modal, Button } from "react-bootstrap";
 import Addchecklist from "./Form";
 import Checklist from "./Checklist";
+import { getCheckListAPI, addCheckListAPI, deleteCheckListAPI } from "./API";
 
-class ChecklistModal extends Component {
+class Model extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show: this.props.show,
       checklist: [],
       addChecklist: false,
-      removeModal: this.props.removeModal,
     };
   }
 
-  handleAddChecklist = (e, input) => {
+  handleAddChecklist = (e, name) => {
     e.preventDefault();
-    let url = `https://api.trello.com/1/checklists?idCard=${this.props.modal.cardId}&name=${input}&key=${this.props.userKey}&token=${this.props.token}`;
-    fetch(url, {
-      method: "POST",
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        let checklist = [...this.state.checklist, res];
-        this.setState({ checklist });
-      });
+    addCheckListAPI(this.props.modal.cardId, name).then((res) => {
+      let checklist = [...this.state.checklist, res];
+      this.setState({ checklist });
+    });
   };
 
   showAddChecklist = () => {
@@ -43,10 +38,7 @@ class ChecklistModal extends Component {
   };
   handleDeleteChecklist = (e, checklistid) => {
     e.preventDefault();
-    let url = `https://api.trello.com/1/checklists/${checklistid}?key=${this.props.userKey}&token=${this.props.token}`;
-    fetch(url, {
-      method: "DELETE",
-    }).then((res) => {
+    deleteCheckListAPI(checklistid).then((res) => {
       let checklist = this.state.checklist.filter(
         (checklist) => checklist.id !== checklistid
       );
@@ -55,15 +47,10 @@ class ChecklistModal extends Component {
   };
 
   componentDidMount() {
-    let url = `https://api.trello.com/1/cards/${this.props.modal.cardId}/checklists?key=${this.props.userKey}&token=${this.props.token}`;
-    fetch(url, {
-      method: "GET",
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        this.setState({ checklist: res });
-      });
+    getCheckListAPI(this.props.modal.cardId).then((res) => {
+      console.log(res);
+      this.setState({ checklist: res });
+    });
   }
 
   render() {
@@ -96,12 +83,7 @@ class ChecklistModal extends Component {
                   >
                     Remove
                   </button>
-                  <Checklist
-                    key={checklist.id}
-                    checklist={checklist}
-                    userKey={this.props.userKey}
-                    token={this.props.token}
-                  />
+                  <Checklist key={checklist.id} checklist={checklist} />
                 </div>
               );
             })}
@@ -116,4 +98,4 @@ class ChecklistModal extends Component {
     );
   }
 }
-export default ChecklistModal;
+export default Model;

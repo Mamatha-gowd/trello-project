@@ -1,18 +1,16 @@
 import React, { Component } from "react";
+import { updateCheckListItemStateAPI } from "./API";
 class CheckItem extends Component {
   state = {
     checkItemstate: this.props.checkitem.state,
   };
 
   handleCheckItemState = (checkitem, checklist) => {
-    let url = `https://api.trello.com/1/cards/${checklist.idCard}/checkItem/${
-      checkitem.id
-    }?state=${
-      this.state.checkItemstate === "complete" ? "incomplete" : "complete"
-    }&key=${this.props.userKey}&token=${this.props.token}`;
-    fetch(url, {
-      method: "PUT",
-    }).then((res) => {
+    updateCheckListItemStateAPI(
+      checklist,
+      checkitem,
+      this.state.checkItemstate
+    ).then((res) => {
       this.setState((state) => {
         return {
           checkItemstate:

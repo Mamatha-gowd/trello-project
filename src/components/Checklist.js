@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Checkitem from "./Checkitem";
 import Form from "./Form";
+import { addCheckListItemAPI, deleteCheckListItemAPI } from "./API";
 
 class Checklist extends Component {
   state = {
@@ -12,10 +13,7 @@ class Checklist extends Component {
     let checkItems = this.state.checkItems.filter(
       (checkitem) => checkitem.id !== checkItemId
     );
-    let url = `https://api.trello.com/1/checklists/${this.props.checklist.id}/checkItems/${checkItemId}?key=${this.props.userKey}&token=${this.props.token}`;
-    fetch(url, {
-      method: "DELETE",
-    }).then((res) => {
+    deleteCheckListItemAPI(this.props.checklist.id, checkItemId).then((res) => {
       this.setState({ checkItems });
     });
   };
@@ -26,15 +24,10 @@ class Checklist extends Component {
 
   handleAddCheckItem = (e, name) => {
     e.preventDefault();
-    let url = `https://api.trello.com/1/checklists/${this.props.checklist.id}/checkItems?name=${name}&key=${this.props.userKey}&token=${this.props.token}`;
-    fetch(url, {
-      method: "POST",
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        let checkItems = [...this.state.checkItems, res];
-        this.setState({ checkItems });
-      });
+    addCheckListItemAPI(this.props.checklist.id, name).then((res) => {
+      let checkItems = [...this.state.checkItems, res];
+      this.setState({ checkItems });
+    });
   };
 
   handleCancelCheckItem = (e) => {
@@ -54,8 +47,6 @@ class Checklist extends Component {
                   checkitem={checkitem}
                   checklist={this.props.checklist}
                   handleDeleteCheckItem={this.handleDeleteCheckItem}
-                  userKey={this.props.userKey}
-                  token={this.props.token}
                 />
               );
             })}
