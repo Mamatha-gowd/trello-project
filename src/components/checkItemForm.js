@@ -1,7 +1,7 @@
 import React from "react";
 export default function Form(props) {
   return (
-    <form>
+    <form className="w-100">
       <input
         type="text"
         className="form-control "
@@ -11,15 +11,14 @@ export default function Form(props) {
       />
 
       <button
-        className="btn btn-success mr-3 mt-2"
+        className="btn btn-success py-1 px-2 mr-3 mt-2"
         onClick={(e) => props.onAdd(e, props.input)}
       >
         update
       </button>
-
       <button
-        className="btn btn-light mt-2"
-        onClick={() => props.handleCancel()}
+        className="btn btn-light p-0 mt-2"
+        onClick={(e) => props.onDelete(e)}
       >
         &times;
       </button>

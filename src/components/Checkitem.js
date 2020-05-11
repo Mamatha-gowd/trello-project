@@ -4,8 +4,8 @@ import Form from "./checkItemForm";
 class CheckItem extends Component {
   state = {
     checkItemstate: this.props.checkitem.state,
-    updateCheckitem: false,
     input: this.props.checkitem.name,
+    updateCheckitem: false,
   };
 
   handleCheckItemState = (checkitem, checklist) => {
@@ -38,8 +38,10 @@ class CheckItem extends Component {
     this.setState({ input: e.target.value });
   };
 
-  handleCancel = () => {
+  handleCancel = (e) => {
+    e.preventDefault();
     this.setState({ updateCheckitem: false });
+    console.log(this.state.updateCheckitem);
   };
 
   handleUpdateCheckitem = () => {
@@ -63,7 +65,7 @@ class CheckItem extends Component {
           {this.state.updateCheckitem ? (
             <Form
               onAdd={this.handleUpdateCheckItem}
-              handleCancel={this.handleCancel}
+              onDelete={this.handleCancel}
               handleChange={this.handleChange}
               input={this.state.input}
             />
