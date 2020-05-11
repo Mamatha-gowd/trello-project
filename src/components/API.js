@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 const token =
   "52615ebb3fb8336a474fd1ab9ec8ae053f5321433e1cbfefefb33a1779816ba9";
 const key = "23fe0646c0d1253eb430f7e02db925a0";

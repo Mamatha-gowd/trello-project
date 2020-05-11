@@ -71,7 +71,6 @@ class List extends Component {
           width: "12em",
           boxSizing: "border-box",
         }}
-        onClick={this.handleClick}
       >
         {this.props.list.listName}
         {this.state.cards.map((card) => {

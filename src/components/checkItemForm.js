@@ -19,9 +19,9 @@ export default function Form(props) {
 
       <button
         className="btn btn-light mt-2"
-        onClick={(e) => props.handleCancel(e)}
+        onClick={() => props.handleCancel()}
       >
-        X
+        &times;
       </button>
     </form>
   );

@@ -33,18 +33,18 @@ class CheckItem extends Component {
       this.setState({ updateCheckitem: false });
     });
   };
+
   handleChange = (e) => {
     this.setState({ input: e.target.value });
   };
 
-  handleCancel = (e) => {
-    e.preventDefault();
+  handleCancel = () => {
     this.setState({ updateCheckitem: false });
   };
 
-  // handleUpdateCheckitem = () => {
-  //   this.setState({ updateCheckitem: true });
-  // };
+  handleUpdateCheckitem = () => {
+    this.setState({ updateCheckitem: true });
+  };
 
   render() {
     return (
@@ -59,7 +59,7 @@ class CheckItem extends Component {
             )
           }
         />
-        <div style={{ width: "90%" }} 
+        <div style={{ width: "90%" }} onClick={this.handleUpdateCheckitem}>
           {this.state.updateCheckitem ? (
             <Form
               onAdd={this.handleUpdateCheckItem}
