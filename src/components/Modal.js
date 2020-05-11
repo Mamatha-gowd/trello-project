@@ -75,16 +75,11 @@ class Model extends Component {
           <div className="checklist mt-2">
             {this.state.checklist.map((checklist) => {
               return (
-                <div className="form mt-4">
-                  <label className="label">{checklist.name}</label>
-                  <button
-                    onClick={(e) => this.handleDeleteChecklist(e, checklist.id)}
-                    className="btn btn-light float-right"
-                  >
-                    Remove
-                  </button>
-                  <Checklist key={checklist.id} checklist={checklist} />
-                </div>
+                <Checklist
+                  key={checklist.id}
+                  checklist={checklist}
+                  handleDeleteChecklist={this.handleDeleteChecklist}
+                />
               );
             })}
           </div>

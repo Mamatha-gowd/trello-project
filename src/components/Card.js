@@ -11,14 +11,16 @@ const Card = (props) => {
       <div className="text-left" style={{ whiteSpace: "normal", width: "90%" }}>
         {props.data.cardName}
       </div>
-      <button
-        className="btn btn-light p-1 rounded delete-card "
-        onClick={(e) => {
-          props.onDelete(e, data.cardId);
-        }}
-      >
-        &times;
-      </button>
+      <div>
+        <button
+          className="btn btn-light p-1 rounded delete-card "
+          onClick={(e) => {
+            props.onDelete(e, data.cardId);
+          }}
+        >
+          &times;
+        </button>
+      </div>
     </button>
   );
 };

@@ -39,19 +39,29 @@ class Checklist extends Component {
     return (
       <div className="my-3">
         <div className="d-flex justify-content-between align-items-center">
-          <div className="py-2">
-            {this.state.checkItems.map((checkitem) => {
-              return (
-                <Checkitem
-                  key={checkitem.id}
-                  checkitem={checkitem}
-                  checklist={this.props.checklist}
-                  handleDeleteCheckItem={this.handleDeleteCheckItem}
-                />
-              );
-            })}
-          </div>
+          {this.props.checklist.name}
+          <button
+            className="btn btn-light"
+            onClick={(e) =>
+              this.props.handleDeleteChecklist(e, this.props.checklist.id)
+            }
+          >
+            Delete
+          </button>
         </div>
+        <div className="py-2">
+          {this.state.checkItems.map((checkitem) => {
+            return (
+              <Checkitem
+                key={checkitem.id}
+                checkitem={checkitem}
+                checklist={this.props.checklist}
+                handleDeleteCheckItem={this.handleDeleteCheckItem}
+              />
+            );
+          })}
+        </div>
+
         {this.state.addCheckItembtn ? (
           <Form
             onAdd={this.handleAddCheckItem}

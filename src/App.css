@@ -2,18 +2,7 @@
   height: 100vh;
   background-image: url("./image.jpg");
 }
-.delete-card {
-  width: 70px;
-  margin-left: 70%;
-  margin-bottom: 10%;
-}
-.add-card {
-  height: 20%;
-}
-.delete-checkitem {
-  margin-left: 80%;
-  font-size: 15px;
-}
+
 .listing {
   margin-left: 100%;
 }
@@ -21,9 +10,7 @@
   display: flex;
   overflow-x: auto;
 }
-.listbutton {
-  width: 200px;
-}
+
 .checkitem {
   margin-left: 380px;
 }

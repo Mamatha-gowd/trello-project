@@ -64,7 +64,7 @@ class List extends Component {
   render() {
     return (
       <div
-        className="rounded p-2 mr-2 ml-2 mt-3 d-inline-block todo-list"
+        className="rounded p-2 ml-2 mt-3 mr-2 d-inline-block todo-list"
         style={{
           backgroundColor: "lightgrey",
           fontSize: "1.5em",

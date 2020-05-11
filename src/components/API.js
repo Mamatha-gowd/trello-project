@@ -95,18 +95,19 @@ export async function updateCheckListItemStateAPI(checklist, checkitem, state) {
   );
   return await data.json();
 }
-// async function updateCheckListItemAPI(
-//   cardId,
-//   checkListItemId,
-//   updatedCheckListValue
-// ) {
-//   await fetch(
-//     `https://api.trello.com/1/cards/${cardId}/checkItem/${checkListItemId}?name=${updatedCheckListValue}&key=${key}&token=${token}`,
-//     {
-//       method: "PUT",
-//     }
-//   );
-// }
+export async function updateCheckListItemAPI(
+  cardId,
+  checkListItemId,
+  updatedCheckListValue
+) {
+  const data = await fetch(
+    `https://api.trello.com/1/cards/${cardId}/checkItem/${checkListItemId}?name=${updatedCheckListValue}&key=${key}&token=${token}`,
+    {
+      method: "PUT",
+    }
+  );
+  return await data.json();
+}
 
 export async function deleteCheckListItemAPI(checkListId, checkListItemId) {
   const data = await fetch(
